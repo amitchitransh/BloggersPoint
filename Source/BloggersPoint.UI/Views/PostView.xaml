@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="BloggersPoint.UI.Views.PostView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:v="clr-namespace:BloggersPoint.UI.Views" 
+             xmlns:converter="clr-namespace:BloggersPoint.Converter"
+             Height="Auto" Width="Auto">
+    <UserControl.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="ConvertBooleanToVisibility"></converter:BooleanToVisibilityConverter>
+        <Style TargetType="{x:Type TextBlock}" x:Key="TextBlockStyle">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        
+        <Style TargetType="{x:Type TextBlock}" x:Key="TextBlockDataStyle">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+            
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="1" Background="AliceBlue">
+            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Author:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,10,0,0"></TextBlock>
+            <TextBlock Grid.Row="1"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="E-Mail:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
+            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Phone No:"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
+            <TextBlock Grid.Row="3"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Web Site:"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Grid.ColumnSpan="3" Background="AliceBlue">
+            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.Name}" HorizontalAlignment="Left" Margin="0,10,0,0"></TextBlock>
+            <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.EMail}" HorizontalAlignment="Left" ></TextBlock>
+            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.Phone}" HorizontalAlignment="Left" ></TextBlock>
+            <TextBlock Grid.Row="3"  Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.Website}" HorizontalAlignment="Left" ></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Background="AliceBlue">
+            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Post Id:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,10,0,0"></TextBlock>
+            <TextBlock Grid.Row="1"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Title:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
+            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Body:"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="3" Background="AliceBlue">
+            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.PostId}" HorizontalAlignment="Left" Margin="0,10,0,0"></TextBlock>
+            <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.Title}" HorizontalAlignment="Left" ></TextBlock>
+            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.Body}" HorizontalAlignment="Left" ></TextBlock>
+        </StackPanel>
+        <GroupBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Header="Copy as" Margin="0,45,0,0">
+            <StackPanel>
+                <Button Content="Plain Text" Height="25" Width="60" Margin="0,5,0,0"  Command="{Binding CopyPlainTextCommand}" ToolTip="Copy post data in plain text format to clip board."></Button>
+                <Button Content="Json" Height="25" Width="60" Margin="120,-25,-15,0" Command="{Binding CopyJsonCommand}" ToolTip="Copy post data in json format to clip board."></Button>
+                <Button Content="HTML" Height="25" Width="60" Margin="240,-25,-30,0" Command="{Binding CopyHtmlCommand}" ToolTip="Copy post data in html format to clip board."></Button>
+            </StackPanel>
+        </GroupBox>
+
+        <DataGrid x:Name="dgComments" AlternatingRowBackground="AliceBlue" Grid.ColumnSpan="4" Grid.Row="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Comments}" ColumnWidth="*" AutoGenerateColumns="False" Height="Auto" Width="Auto" IsReadOnly="True" CanUserReorderColumns="False"
+                  HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Comments By" Binding="{Binding EMail}" IsReadOnly="True"/>
+                <DataGridTextColumn  Header="Title" Binding="{Binding Name}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Body}" Background="LightBlue" />
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+        <v:ProgressView Grid.RowSpan="9" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource ConvertBooleanToVisibility}}"/>
+    </Grid>
+</UserControl>
