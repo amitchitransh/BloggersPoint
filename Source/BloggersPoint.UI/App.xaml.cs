@@ -1,6 +1,7 @@
 ﻿using BloggersPoint.Services;
 using System.Windows;
 using System.Windows.Threading;
+using BloggersPoint.Core.Services;
 
 namespace BloggersPoint.UI
 {
@@ -9,11 +10,16 @@ namespace BloggersPoint.UI
     /// </summary>
     public partial class App : Application
     {
-        void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             IMesaageService messageBoxService = new MessageService();
             messageBoxService.ShowErrorMessage("An unhandled exception occurred: " + e.Exception.Message);
             Current.Shutdown();
+        }
+
+        private void OnApplicationExit(object sender, ExitEventArgs e)
+        {
+            CachingService.Current.FlushCachedData();
         }
     }
 }

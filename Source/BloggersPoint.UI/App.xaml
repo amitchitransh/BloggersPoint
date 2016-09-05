@@ -1,9 +1,9 @@
 ﻿<Application x:Class="BloggersPoint.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:BloggersPoint.UI.ViewModel"
              StartupUri="Views\MainWindow.xaml"
-             DispatcherUnhandledException="OnDispatcherUnhandledException">
+             DispatcherUnhandledException="OnDispatcherUnhandledException"
+             Exit="OnApplicationExit">
     <Application.Resources>
     </Application.Resources>
 </Application>

@@ -36,11 +36,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        
-        <DataGrid x:Name="dgPosts" AlternatingRowBackground="AliceBlue"  Background="White" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True" CanUserReorderColumns="False"
+
+        <Border Name="border" Background="#2a3345" BorderThickness="0" CornerRadius="10" Margin="10">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="0.8" BlurRadius="10"/>
+            </Border.Effect>
+            </Border>
+            <DataGrid x:Name="dgPosts" AlternatingRowBackground="AliceBlue"  Background="White" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True" CanUserReorderColumns="False"
                   HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" SelectionMode="Single" ItemsSource="{Binding Source={StaticResource PostDataView}}" SelectedItem="{Binding SelectedPost}" ToolTip="Shows all the available posts.">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Post Id" Binding="{Binding PostId}"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Id" Width="25" Binding="{Binding PostId}"  IsReadOnly="True"/>
                 <DataGridTextColumn  Header="Title" Binding="{Binding Title}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>

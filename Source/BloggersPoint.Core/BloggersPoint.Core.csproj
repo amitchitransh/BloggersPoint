@@ -38,6 +38,7 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -51,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\StringWriterUtf8Encoding.cs" />
-    <Compile Include="Models\Comments.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\ConversionOptions.cs" />
     <Compile Include="Models\ConversionResult.cs" />
@@ -64,10 +65,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\CachingService.cs" />
+    <Compile Include="Converters\HtmlConverter.cs" />
     <Compile Include="Services\IBloggersPointService.cs" />
     <Compile Include="Services\BloggersPointService.cs" />
     <Compile Include="Services\BloggersPointServiceProvider.cs" />
-    <Compile Include="Services\ObjectConverterService.cs" />
+    <Compile Include="Converters\IObjectConverter.cs" />
+    <Compile Include="Converters\JsonConverter.cs" />
+    <Compile Include="Converters\PlainTextConverter.cs" />
+    <Compile Include="Converters\XmlConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

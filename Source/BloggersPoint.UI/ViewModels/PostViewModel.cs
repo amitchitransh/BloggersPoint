@@ -9,6 +9,7 @@ using NLog;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using BloggersPoint.Core.Converters;
 
 namespace BloggersPoint.UI.ViewModel
 {
@@ -17,10 +18,11 @@ namespace BloggersPoint.UI.ViewModel
         private Author _author;
         private bool _isBusy;
         private Post _post;
+        private string _copyResultMessage;
         private ICommand _copyJsonCommand;
         private ICommand _copyPlainTextCommand;
         private ICommand _copyHtmlCommand;
-        private CommentsCollection _comments;
+        private CommentCollection _comments;
         private readonly IBloggersPointService _bloggersPointService = new BloggersPointService();
         private readonly IMesaageService _messageService = new MessageService();
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
@@ -34,6 +36,7 @@ namespace BloggersPoint.UI.ViewModel
         private const string CommentsProperty = "Comments";
         private const string IsBusyProperty = "IsBusy";
         private const string PostProperty = "Post";
+        private const string CopyResultMessageProperty = "CopyResultMessage";
 
         public Post Post
         {
@@ -76,7 +79,21 @@ namespace BloggersPoint.UI.ViewModel
 
         }
 
-        public CommentsCollection Comments
+        public string CopyResultMessage
+        {
+            get
+            {
+                return _copyResultMessage;
+            }
+
+            set
+            {
+                _copyResultMessage = value;
+                OnPropertyChanged(CopyResultMessageProperty);
+            }
+
+        }
+        public CommentCollection Comments
         {
             get
             {
@@ -97,6 +114,7 @@ namespace BloggersPoint.UI.ViewModel
                     return _copyJsonCommand;
 
                 _copyJsonCommand = new RelayCommand(i => ConvertObject(ConversionOption.Json), null);
+
                 return _copyJsonCommand;
             }
         }
@@ -109,6 +127,7 @@ namespace BloggersPoint.UI.ViewModel
                     return _copyPlainTextCommand;
 
                 _copyPlainTextCommand = new RelayCommand(i => ConvertObject(ConversionOption.PlainText), null);
+
                 return _copyPlainTextCommand;
             }
         }
@@ -127,33 +146,31 @@ namespace BloggersPoint.UI.ViewModel
 
         private void ConvertObject(ConversionOption conversionOption)
         {
-            ConversionResult converionResult = null;
+            CopyResultMessage = string.Empty;
 
             PrepareAdditionalObjects();
+
+            IObjectConverter objectConverter = null;
 
             switch (conversionOption)
             {
                 case ConversionOption.Json:
-                    converionResult = ObjectConverterService.ToJson(Post);
+                    objectConverter = new JsonConverter();
                     break;
                 case ConversionOption.Html:
-                    converionResult = ObjectConverterService.ToHtml(Post);
+                    objectConverter = new HtmlConverter();
                     break;
                 case ConversionOption.PlainText:
-                    converionResult = ObjectConverterService.ToPlainText(Post);
+                    objectConverter = new PlainTextConverter();
                     break;
                 default:
-                    converionResult = ObjectConverterService.ToPlainText(Post);
+                    objectConverter = new PlainTextConverter();
                     break;
             }
-            
-            if (converionResult == null)
-                throw new ArgumentNullException(nameof(converionResult), Resources.InvalidConversionResult);
+            objectConverter.Convert(Post);
+            Clipboard.SetText(objectConverter.Convert(Post).ResultString);
 
-            if (converionResult.ConversionResultStatus == ConversionResultStatus.Failed)
-                _messageService.ShowErrorMessage(converionResult.ResultString);
-
-            Clipboard.SetText(converionResult.ResultString);
+            CopyResultMessage = $"{conversionOption} data copied to clipboard.";
         }
 
         private void PrepareAdditionalObjects()
@@ -170,7 +187,7 @@ namespace BloggersPoint.UI.ViewModel
             PropertyChanged += OnPropertyChanged;
 
             Post = post;
-            
+            CopyResultMessage = string.Empty;
         }
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -213,11 +230,11 @@ namespace BloggersPoint.UI.ViewModel
             return authorList?[0];
         }
 
-        private async Task<CommentsCollection> GetComments()
+        private async Task<CommentCollection> GetComments()
         {
             try
             {
-                _comments = await _bloggersPointService.RunGetJsonDataUsingIdTask<CommentsCollection>(CommentsDataResource, PostIdField, Post.PostId.ToString());
+                _comments = await _bloggersPointService.RunGetJsonDataUsingIdTask<CommentCollection>(CommentsDataResource, PostIdField, Post.PostId.ToString());
             }
             catch (Exception exception)
             {

@@ -58,11 +58,12 @@
             <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.Title}" HorizontalAlignment="Left" ></TextBlock>
             <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.Body}" HorizontalAlignment="Left" ></TextBlock>
         </StackPanel>
-        <GroupBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Header="Copy as" Margin="0,45,0,0">
+        <GroupBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Header="Copy as" Margin="0,30,0,0">
             <StackPanel>
                 <Button Content="Plain Text" Height="25" Width="60" Margin="0,5,0,0"  Command="{Binding CopyPlainTextCommand}" ToolTip="Copy post data in plain text format to clip board."></Button>
                 <Button Content="Json" Height="25" Width="60" Margin="120,-25,-15,0" Command="{Binding CopyJsonCommand}" ToolTip="Copy post data in json format to clip board."></Button>
                 <Button Content="HTML" Height="25" Width="60" Margin="240,-25,-30,0" Command="{Binding CopyHtmlCommand}" ToolTip="Copy post data in html format to clip board."></Button>
+                <Label Content="{Binding CopyResultMessage}" Height="25" Margin="0,-5,-30,0" HorizontalAlignment="Left" FontWeight="SemiBold" HorizontalContentAlignment="Stretch"></Label>
             </StackPanel>
         </GroupBox>
 

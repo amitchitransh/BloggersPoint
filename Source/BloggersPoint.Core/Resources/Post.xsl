@@ -64,7 +64,7 @@
           <th>E-Mail</th>
           <th>Name</th>
           <th>Body</th>
-          <xsl:for-each select="Post/Comments/Comments">
+          <xsl:for-each select="Post/Comments/Comment">
             <tr>
               <td>
                 <xsl:value-of select="Id"/>

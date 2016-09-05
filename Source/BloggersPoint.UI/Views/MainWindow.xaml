@@ -7,10 +7,11 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        xmlns:Converter="clr-namespace:BloggersPoint.Converter"
+        xmlns:converter="clr-namespace:BloggersPoint.Converter"
         Title="Blogger's Point" Height="500" Width="1000">
     <Window.Resources>
-        <Converter:BooleanToVisibilityConverter x:Key="ConvertBooleanToVisibility"></Converter:BooleanToVisibilityConverter>
+        <converter:BooleanToVisibilityConverter x:Key="ConvertBooleanToVisibility"></converter:BooleanToVisibilityConverter>
+
         <DataTemplate x:Key="PostListTemplate" >
             <v:PostListView/>
         </DataTemplate>

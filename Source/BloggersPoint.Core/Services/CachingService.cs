@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using BloggersPoint.Core.Converters;
 using BloggersPoint.Core.Properties;
 
 namespace BloggersPoint.Core.Services
@@ -74,14 +75,22 @@ namespace BloggersPoint.Core.Services
             Directory.CreateDirectory(directoryName);
         }
 
-        public void AddData<T>(T autoUpdateResponse, string resourceName, string id)
+        public void AddData<T>(T dataObject, string resourceName, string id)
         {
             var resourceCacheLocation = CacheFilePath + resourceName + id + CacheFileExtension;
             using (var streamWriter = new StreamWriter(resourceCacheLocation))
             {
-                streamWriter.WriteLine(ObjectConverterService.ToXml(autoUpdateResponse).ResultString);
+                IObjectConverter objectConverter = new XmlConverter();
+                streamWriter.WriteLine(objectConverter.Convert(dataObject).ResultString);
                 streamWriter.Close();
             }
+        }
+
+        public void FlushCachedData()
+        {
+            var directoryInfo = new DirectoryInfo(CacheFilePath);
+            foreach (var file in directoryInfo.GetFiles())
+                file.Delete();
         }
     }
 }
