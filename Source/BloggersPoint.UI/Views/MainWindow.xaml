@@ -25,21 +25,32 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="2" Grid.Column="0" BorderThickness="1" BorderBrush="LightBlue"/>
-        <Border Grid.Row="2" Grid.Column="1" BorderThickness="1" BorderBrush="LightBlue"/>
-        <GridSplitter Grid.Row="2" Grid.Column="1" Width="2" HorizontalAlignment="Left" Grid.RowSpan="2"/>
-        <DockPanel Grid.Row="0" Grid.Column="0" Background="LightBlue" Grid.ColumnSpan="2">
-            <Label Content="Blogger's Point" HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"></Label>
-        </DockPanel>
-        <DockPanel Grid.Row="1" Grid.Column="0" Background="LightBlue" Grid.ColumnSpan="2">
-            <Label Content="Version 1.0" HorizontalAlignment="Right" FontSize="10"  VerticalAlignment="Center"></Label>
-        </DockPanel>
+        <GridSplitter Grid.Row="2" Grid.Column="1" Width="2" HorizontalAlignment="Left"/>
+        <Grid x:Name="GdHeader" Grid.Row="0" Grid.Column="0" Background="LightBlue" Grid.ColumnSpan="2">
+            <Border Name="BrdPostDetail" Background="LightBlue" BorderThickness="0" CornerRadius="10" Margin="10">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.8" BlurRadius="10"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Blogger's Point" TextOptions.TextRenderingMode="ClearType" Grid.Row="0" TextOptions.TextFormattingMode="Display"
+                                   FontSize="58" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="Version 1.0" TextOptions.TextRenderingMode="ClearType" Grid.Row="1" TextOptions.TextFormattingMode="Display"
+                                   FontSize="18" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Right" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                </Grid>
+            </Border>
+        </Grid>
         <ContentControl Content="{Binding}" ContentTemplate="{StaticResource PostListTemplate}" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Stretch" />
-
         <ContentControl Content="{Binding SelectedPostViewModel}" ContentTemplate="{StaticResource PostDetailsTemplate}" Visibility="{Binding IsPostDetailVisible, Converter={StaticResource ConvertBooleanToVisibility}}" Grid.Column="1" Grid.Row="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" Margin="5,0,0,0"/>
 
     </Grid>

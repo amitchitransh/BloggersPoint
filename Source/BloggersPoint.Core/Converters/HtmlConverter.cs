@@ -3,7 +3,6 @@ using BloggersPoint.Core.Properties;
 using NLog;
 using System;
 using System.IO;
-using System.Windows;
 using System.Xml;
 using System.Xml.Xsl;
 
@@ -23,19 +22,16 @@ namespace BloggersPoint.Core.Converters
             if (conversionResult.ConversionResultStatus == ConversionResultStatus.Failed)
                 return conversionResult;
 
-            var xmlString = objectConverter.Convert<T>(dataObject).ResultString;
-
             try
             {
                 var compiledTransform = new XslCompiledTransform();
                 using (
                     XmlReader xmlreader = XmlReader.Create(new StringReader(Resources.Post)),
-                        xsltreader = XmlReader.Create(new StringReader(xmlString)))
+                        xsltreader = XmlReader.Create(new StringReader(conversionResult.ResultString)))
                 {
                     compiledTransform.Load(xmlreader);
                     compiledTransform.Transform(xsltreader, null, results);
                     conversionResult.ResultString = results.ToString();
-                    Clipboard.SetText(conversionResult.ResultString);
                 }
             }
             catch (Exception exception)

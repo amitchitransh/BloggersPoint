@@ -72,8 +72,9 @@
     </ApplicationDefinition>
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Services\IMesaageService.cs" />
+    <Compile Include="Services\IMessageService.cs" />
     <Compile Include="Services\MessageService.cs" />
+    <Compile Include="Services\WebBrowserService.cs" />
     <Compile Include="ViewModels\PostListViewModel.cs" />
     <Compile Include="ViewModels\PostViewModel.cs" />
     <Compile Include="Views\PostView.xaml.cs">

@@ -4,7 +4,7 @@
              xmlns:v="clr-namespace:BloggersPoint.UI.Views" 
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             xmlns:Converter="clr-namespace:BloggersPoint.Converter"
+             xmlns:converter="clr-namespace:BloggersPoint.Converter"
              Background="White"
              Height="Auto" Width="Auto">
     <i:Interaction.Triggers>
@@ -13,7 +13,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.Resources>
-        <Converter:BooleanToVisibilityConverter x:Key="ConvertBooleanToVisibility"></Converter:BooleanToVisibilityConverter>
+        <converter:BooleanToVisibilityConverter x:Key="ConvertBooleanToVisibility"></converter:BooleanToVisibilityConverter>
         <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
@@ -24,7 +24,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+
         <CollectionViewSource Source="{Binding PostList}" x:Key="PostDataView">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="PostId" Direction="Ascending"/>

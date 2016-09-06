@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:v="clr-namespace:BloggersPoint.UI.Views" 
              xmlns:converter="clr-namespace:BloggersPoint.Converter"
+             xmlns:model="clr-namespace:BloggersPoint.Core.Models;assembly=BloggersPoint.Core"
+             xmlns:services="clr-namespace:BloggersPoint.UI.Services"
              Height="Auto" Width="Auto">
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="ConvertBooleanToVisibility"></converter:BooleanToVisibilityConverter>
@@ -10,75 +12,142 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="12" />
         </Style>
-        
+
         <Style TargetType="{x:Type TextBlock}" x:Key="TextBlockDataStyle">
             <Setter Property="FontSize" Value="12" />
         </Style>
+
+        <DataTemplate x:Key="CommentTemplate" DataType="model:Comment">
+            <Grid x:Name="gdComment">
+                <Border Name="border" Background="LightBlue" BorderThickness="0" CornerRadius="10" Margin="10">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" Opacity="0.8" BlurRadius="10"/>
+                    </Border.Effect>
+                    <Grid Margin="10,15,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Name:" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                        <TextBlock Grid.Row="1"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="E-Mail:"  HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                        <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockDataStyle}" Grid.Column="1" Text="{Binding Path=Name}" HorizontalAlignment="Left" ></TextBlock>
+                        <TextBlock Grid.Row="1"  Style="{DynamicResource TextBlockDataStyle}" Grid.Column="1" Text="{Binding Path=EMail}" HorizontalAlignment="Left" ></TextBlock>
+                        <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockDataStyle}" Grid.Column="1" Text="{Binding Path=Body}" HorizontalAlignment="Left" Grid.ColumnSpan="2"></TextBlock>
+                    </Grid>
+                </Border>
+            </Grid>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"></ColumnDefinition>
-            <ColumnDefinition Width="150"></ColumnDefinition>
-            <ColumnDefinition Width="150"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="25"></RowDefinition>
-
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            
+            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="150"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        <Grid x:Name="GdAuthor" Grid.Row="0">
+            <Border Name="BrdrAuthorDetail" Background="LightBlue" BorderThickness="0" CornerRadius="10" Margin="10">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.8" BlurRadius="10"/>
+                </Border.Effect>
+                <Grid Margin="10,15,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"></RowDefinition>
+                        <RowDefinition Height="25"></RowDefinition>
+                        <RowDefinition Height="25"></RowDefinition>
+                        <RowDefinition Height="25"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Author:" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                    <TextBlock Grid.Row="1"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="E-Mail:" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                    <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Phone No:"  HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                    <TextBlock Grid.Row="3"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Web Site:"  HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                    <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockDataStyle}" Grid.Column="1" Text="{Binding Author.Name}" HorizontalAlignment="Left" ></TextBlock>
+                    <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockDataStyle}" Grid.Column="1" Text="{Binding Author.EMail}" HorizontalAlignment="Left" ></TextBlock>
+                    <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockDataStyle}" Grid.Column="1" Text="{Binding Author.Phone}" HorizontalAlignment="Left" ></TextBlock>
+                    <TextBlock Grid.Row="3"  Style="{DynamicResource TextBlockDataStyle}" Grid.Column="1" Text="{Binding Author.Website}" HorizontalAlignment="Left" ></TextBlock>
+                </Grid>
+            </Border>
+        </Grid>
+        <Grid x:Name="GdPost" Grid.Row="1">
+            <Border Name="BrdPostDetail" Background="LightBlue" BorderThickness="0" CornerRadius="10" Margin="10">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.8" BlurRadius="10"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Post.Body}" TextOptions.TextRenderingMode="ClearType" TextOptions.TextFormattingMode="Display"
+                                   FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                </Grid>
+            </Border>
+        </Grid>
 
-        <StackPanel Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="1" Background="AliceBlue">
-            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Author:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,10,0,0"></TextBlock>
-            <TextBlock Grid.Row="1"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="E-Mail:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
-            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Phone No:"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
-            <TextBlock Grid.Row="3"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Web Site:"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
-        </StackPanel>
-        <StackPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Grid.ColumnSpan="3" Background="AliceBlue">
-            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.Name}" HorizontalAlignment="Left" Margin="0,10,0,0"></TextBlock>
-            <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.EMail}" HorizontalAlignment="Left" ></TextBlock>
-            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.Phone}" HorizontalAlignment="Left" ></TextBlock>
-            <TextBlock Grid.Row="3"  Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Author.Website}" HorizontalAlignment="Left" ></TextBlock>
-        </StackPanel>
-        <StackPanel Grid.Row="5" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Background="AliceBlue">
-            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Post Id:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,10,0,0"></TextBlock>
-            <TextBlock Grid.Row="1"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Title:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
-            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockStyle}" Grid.Column="0" Text="Body:"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0"></TextBlock>
-        </StackPanel>
-        <StackPanel Grid.Row="5" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="3" Background="AliceBlue">
-            <TextBlock Grid.Row="0" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.PostId}" HorizontalAlignment="Left" Margin="0,10,0,0"></TextBlock>
-            <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.Title}" HorizontalAlignment="Left" ></TextBlock>
-            <TextBlock Grid.Row="2"  Style="{DynamicResource TextBlockDataStyle}" Text="{Binding Post.Body}" HorizontalAlignment="Left" ></TextBlock>
-        </StackPanel>
-        <GroupBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Header="Copy as" Margin="0,30,0,0">
-            <StackPanel>
-                <Button Content="Plain Text" Height="25" Width="60" Margin="0,5,0,0"  Command="{Binding CopyPlainTextCommand}" ToolTip="Copy post data in plain text format to clip board."></Button>
-                <Button Content="Json" Height="25" Width="60" Margin="120,-25,-15,0" Command="{Binding CopyJsonCommand}" ToolTip="Copy post data in json format to clip board."></Button>
-                <Button Content="HTML" Height="25" Width="60" Margin="240,-25,-30,0" Command="{Binding CopyHtmlCommand}" ToolTip="Copy post data in html format to clip board."></Button>
-                <Label Content="{Binding CopyResultMessage}" Height="25" Margin="0,-5,-30,0" HorizontalAlignment="Left" FontWeight="SemiBold" HorizontalContentAlignment="Stretch"></Label>
-            </StackPanel>
-        </GroupBox>
-
-        <DataGrid x:Name="dgComments" AlternatingRowBackground="AliceBlue" Grid.ColumnSpan="4" Grid.Row="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Comments}" ColumnWidth="*" AutoGenerateColumns="False" Height="Auto" Width="Auto" IsReadOnly="True" CanUserReorderColumns="False"
-                  HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" SelectionMode="Single">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Comments By" Binding="{Binding EMail}" IsReadOnly="True"/>
-                <DataGridTextColumn  Header="Title" Binding="{Binding Name}" IsReadOnly="True"/>
-            </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Body}" Background="LightBlue" />
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-        </DataGrid>
+        <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" >
+            <TabItem Name="TbComments" Header="Comments">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <ItemsControl x:Name="CommentsControl" ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentTemplate}" />
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Name="TbJson" Header="Json View">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Copy to Clipboard" Command="{Binding CopyJsonCommand}"></Button>
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding CopyResultMessage}" FontWeight="SemiBold"></TextBlock>
+                        <TextBlock Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="{Binding ObjectAsJson}" TextWrapping="Wrap"></TextBlock>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Name="TbHtml" Header="Html View">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Copy to Clipboard" Command="{Binding CopyHtmlCommand}"></Button>
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding CopyResultMessage}" FontWeight="SemiBold"></TextBlock>
+                        <WebBrowser Name="WebBrowser" Grid.Row="2" services:WebBrowserService.Source="{Binding HtmlSourcePath}"/>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Name="TbPlainText" Header="Plain Text View">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Copy to Clipboard" Command="{Binding CopyPlainTextCommand}"></Button>
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding CopyResultMessage}" FontWeight="SemiBold"></TextBlock>
+                        <TextBlock Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="{Binding ObjectAsPlainText}"></TextBlock>
+                    </Grid>
+                </ScrollViewer>
+                </TabItem>
+        </TabControl>
         <v:ProgressView Grid.RowSpan="9" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource ConvertBooleanToVisibility}}"/>
     </Grid>
 </UserControl>

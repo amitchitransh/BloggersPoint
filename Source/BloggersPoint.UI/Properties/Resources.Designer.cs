@@ -80,6 +80,15 @@ namespace BloggersPoint.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error while acceccing tab control.
+        /// </summary>
+        internal static string ErrorAcceccingTabControl {
+            get {
+                return ResourceManager.GetString("ErrorAcceccingTabControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid conversion result.
         /// </summary>
         internal static string InvalidConversionResult {

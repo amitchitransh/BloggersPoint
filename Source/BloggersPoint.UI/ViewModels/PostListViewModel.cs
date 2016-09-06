@@ -2,7 +2,7 @@
 using BloggersPoint.Core.Services;
 using System.Windows.Input;
 using System;
-using BloggersPoint.Services;
+using BloggersPoint.UI.Services;
 using BloggersPoint.Core.Models;
 using System.Threading.Tasks;
 using NLog;

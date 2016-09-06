@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloggersPoint.Core", "Blogg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloggersPoint.UI", "BloggersPoint.UI\BloggersPoint.UI.csproj", "{DE86BDDB-21DD-4AF5-84E4-4C8619B8B943}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloggersPoint.Core.UnitTests", "BloggersPoint.Core.UnitTests\BloggersPoint.Core.UnitTests.csproj", "{B8ADF9AF-028C-406B-8535-58908FE18F32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,6 +23,10 @@ Global
 		{DE86BDDB-21DD-4AF5-84E4-4C8619B8B943}.Debug|x86.Build.0 = Debug|x86
 		{DE86BDDB-21DD-4AF5-84E4-4C8619B8B943}.Release|x86.ActiveCfg = Release|x86
 		{DE86BDDB-21DD-4AF5-84E4-4C8619B8B943}.Release|x86.Build.0 = Release|x86
+		{B8ADF9AF-028C-406B-8535-58908FE18F32}.Debug|x86.ActiveCfg = Debug|x86
+		{B8ADF9AF-028C-406B-8535-58908FE18F32}.Debug|x86.Build.0 = Debug|x86
+		{B8ADF9AF-028C-406B-8535-58908FE18F32}.Release|x86.ActiveCfg = Release|x86
+		{B8ADF9AF-028C-406B-8535-58908FE18F32}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

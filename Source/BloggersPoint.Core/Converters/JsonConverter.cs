@@ -1,7 +1,6 @@
 ﻿using BloggersPoint.Core.Models;
 using System;
 using NLog;
-using System.Windows;
 
 namespace BloggersPoint.Core.Converters
 {
@@ -18,7 +17,6 @@ namespace BloggersPoint.Core.Converters
             {
                 var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                 conversionResult.ResultString = javaScriptSerializer.Serialize(dataObject);
-                Clipboard.SetText(conversionResult.ResultString);
             }
             catch (Exception exception)
             {

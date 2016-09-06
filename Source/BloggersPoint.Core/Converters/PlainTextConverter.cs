@@ -1,7 +1,6 @@
 ﻿using BloggersPoint.Core.Models;
 using NLog;
 using System;
-using System.Windows;
 
 namespace BloggersPoint.Core.Converters
 {
@@ -17,7 +16,6 @@ namespace BloggersPoint.Core.Converters
             try
             {
                 conversionResult.ResultString = dataObject.ToString();
-                Clipboard.SetText(conversionResult.ResultString);
             }
             catch (Exception exception)
             {

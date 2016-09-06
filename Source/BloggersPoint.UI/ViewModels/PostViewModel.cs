@@ -3,10 +3,11 @@ using BloggersPoint.Core.Models;
 using System.Threading.Tasks;
 using BloggersPoint.Core.Services;
 using System;
-using BloggersPoint.Services;
+using BloggersPoint.UI.Services;
 using BloggersPoint.Properties;
 using NLog;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using BloggersPoint.Core.Converters;
@@ -18,10 +19,15 @@ namespace BloggersPoint.UI.ViewModel
         private Author _author;
         private bool _isBusy;
         private Post _post;
+        private string _htmlSourcePath;
         private string _copyResultMessage;
-        private ICommand _copyJsonCommand;
-        private ICommand _copyPlainTextCommand;
         private ICommand _copyHtmlCommand;
+        private ICommand _copyPlainTextCommand;
+        private ICommand _copyJsonCommand;
+        private int _selectedIndex;
+        private string _objectAsPlainText;
+        private string _objectAsHtml;
+        private string _objectAsJson;
         private CommentCollection _comments;
         private readonly IBloggersPointService _bloggersPointService = new BloggersPointService();
         private readonly IMesaageService _messageService = new MessageService();
@@ -37,6 +43,24 @@ namespace BloggersPoint.UI.ViewModel
         private const string IsBusyProperty = "IsBusy";
         private const string PostProperty = "Post";
         private const string CopyResultMessageProperty = "CopyResultMessage";
+        private const string HtmlSourcePathProperty = "HtmlSourcePath";
+        private const string ObjectAsHtmlProperty = "ObjectAsHtml";
+        private const string ObjectAsPlainTextProperty = "ObjectAsPlainText";
+        private const string ObjectAsJsonProperty = "ObjectAsJson";
+        private const string SelectedIndexProperty = "SelectedIndex";
+
+        private const string HtmlCopiedSuccessfullyMessage = "Html data copied to clipboard.";
+        private const string PlainTextCopiedSuccessfullyMessage = "Plain Text data copied to clipboard.";
+        private const string JsonCopiedSuccessfullyMessage = "Json data copied to clipboard.";
+
+        private const int JsonTabIndex = 1;
+        private const int HtmlTabIndex = 2;
+        private const int PlainTextIndex = 3;
+
+        private static readonly string ConvertedFileTemporaryLocation =
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\";
+
+        private static readonly string HtmlFileProtocol = "file://";
 
         public Post Post
         {
@@ -93,6 +117,88 @@ namespace BloggersPoint.UI.ViewModel
             }
 
         }
+
+        public string ObjectAsHtml
+        {
+            get { return _objectAsHtml; }
+            set
+            {
+                _objectAsHtml = value;
+                OnPropertyChanged(ObjectAsHtmlProperty);
+            }
+        }
+
+        public string ObjectAsPlainText
+        {
+            get { return _objectAsPlainText; }
+            set
+            {
+                _objectAsPlainText = value;
+                OnPropertyChanged(ObjectAsPlainTextProperty);
+            }
+        }
+
+        public string ObjectAsJson
+        {
+            get { return _objectAsJson; }
+            set
+            {
+                _objectAsJson = value;
+                OnPropertyChanged(ObjectAsJsonProperty);
+            }
+        }
+
+        public ICommand CopyHtmlCommand
+        {
+            get
+            {
+                if (_copyHtmlCommand != null)
+                    return _copyHtmlCommand;
+
+                _copyHtmlCommand = new RelayCommand(i => CopyAsHtml(), null);
+                return _copyHtmlCommand;
+            }
+        }
+
+        public ICommand CopyPlainTextCommand
+        {
+            get
+            {
+                if (_copyPlainTextCommand != null)
+                    return _copyPlainTextCommand;
+
+                _copyPlainTextCommand = new RelayCommand(i => CopyAsPlainText(), null);
+                return _copyPlainTextCommand;
+            }
+        }
+
+        public ICommand CopyJsonCommand
+        {
+            get
+            {
+                if (_copyJsonCommand != null)
+                    return _copyJsonCommand;
+
+                _copyJsonCommand = new RelayCommand(i => CopyAsJson(), null);
+                return _copyJsonCommand;
+            }
+        }
+
+        public string HtmlSourcePath
+        {
+            get
+            {
+                return _htmlSourcePath;
+            }
+
+            set
+            {
+                _htmlSourcePath = value;
+                OnPropertyChanged(HtmlSourcePathProperty);
+            }
+
+        }
+
         public CommentCollection Comments
         {
             get
@@ -105,46 +211,39 @@ namespace BloggersPoint.UI.ViewModel
                 OnPropertyChanged(CommentsProperty);
             }
         }
-
-        public ICommand CopyJsonCommand
+        public int SelectedIndex
         {
             get
             {
-                if (_copyJsonCommand != null)
-                    return _copyJsonCommand;
-
-                _copyJsonCommand = new RelayCommand(i => ConvertObject(ConversionOption.Json), null);
-
-                return _copyJsonCommand;
+                return _selectedIndex;
             }
-        }
-
-        public ICommand CopyPlainTextCommand
-        {
-            get
+            set
             {
-                if (_copyPlainTextCommand != null)
-                    return _copyPlainTextCommand;
-
-                _copyPlainTextCommand = new RelayCommand(i => ConvertObject(ConversionOption.PlainText), null);
-
-                return _copyPlainTextCommand;
+                _selectedIndex = value;
+                PopulateTab(_selectedIndex);
+                OnPropertyChanged(SelectedIndexProperty);
             }
         }
 
-        public ICommand CopyHtmlCommand
+        private void CopyAsHtml()
         {
-            get
-            {
-                if (_copyHtmlCommand != null)
-                    return _copyHtmlCommand;
-
-                _copyHtmlCommand = new RelayCommand(i => ConvertObject(ConversionOption.Html), null);
-                return _copyHtmlCommand;
-            }
+            Clipboard.SetText(ObjectAsHtml);
+            CopyResultMessage = HtmlCopiedSuccessfullyMessage;
         }
 
-        private void ConvertObject(ConversionOption conversionOption)
+        private void CopyAsPlainText()
+        {
+            Clipboard.SetText(ObjectAsPlainText);
+            CopyResultMessage = PlainTextCopiedSuccessfullyMessage;
+        }
+
+        private void CopyAsJson()
+        {
+            Clipboard.SetText(ObjectAsJson);
+            CopyResultMessage = JsonCopiedSuccessfullyMessage;
+        }
+
+        private IObjectConverter ConvertObject(ConversionOption conversionOption)
         {
             CopyResultMessage = string.Empty;
 
@@ -167,10 +266,7 @@ namespace BloggersPoint.UI.ViewModel
                     objectConverter = new PlainTextConverter();
                     break;
             }
-            objectConverter.Convert(Post);
-            Clipboard.SetText(objectConverter.Convert(Post).ResultString);
-
-            CopyResultMessage = $"{conversionOption} data copied to clipboard.";
+            return objectConverter;
         }
 
         private void PrepareAdditionalObjects()
@@ -188,6 +284,64 @@ namespace BloggersPoint.UI.ViewModel
 
             Post = post;
             CopyResultMessage = string.Empty;
+        }
+
+        private void PopulateTab(int selectedTabIndex)
+        {
+            CopyResultMessage = string.Empty;
+            switch (selectedTabIndex)
+            {
+                case JsonTabIndex:
+                    PopulateJsonTab();
+                    break;
+                case HtmlTabIndex:
+                    PopulateHtmlTab();
+                    break;
+                case PlainTextIndex:
+                    PopulatePlainTextTab();
+                    break;
+            }
+            
+        }
+
+        private void PopulateHtmlTab()
+        {
+            var objectConverter = ConvertObject(ConversionOption.Html);
+            var conversionResult = objectConverter.Convert(Post);
+
+            if (conversionResult.ConversionResultStatus == ConversionResultStatus.Failed)
+                return;
+
+            ObjectAsHtml = conversionResult.ResultString;
+            var conversionTemporaryLocation = ConvertedFileTemporaryLocation + Post.PostId + ".html";
+            using (var streamWriter = new StreamWriter(conversionTemporaryLocation))
+            {
+                streamWriter.WriteLine(ObjectAsHtml);
+                streamWriter.Close();
+            }
+            HtmlSourcePath = HtmlFileProtocol + conversionTemporaryLocation;
+        }
+
+        private void PopulateJsonTab()
+        {
+            var objectConverter = ConvertObject(ConversionOption.Json);
+            var conversionResult = objectConverter.Convert(Post);
+
+            if (conversionResult.ConversionResultStatus == ConversionResultStatus.Failed)
+                return;
+
+            ObjectAsJson = conversionResult.ResultString;
+        }
+
+        private void PopulatePlainTextTab()
+        {
+            var objectConverter = ConvertObject(ConversionOption.PlainText);
+            var conversionResult = objectConverter.Convert(Post);
+
+            if (conversionResult.ConversionResultStatus == ConversionResultStatus.Failed)
+                return;
+
+            ObjectAsPlainText = conversionResult.ResultString;
         }
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -245,3 +399,4 @@ namespace BloggersPoint.UI.ViewModel
         }
     }
 }
+

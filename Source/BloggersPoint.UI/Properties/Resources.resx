@@ -127,4 +127,7 @@
   <data name="InvalidConversionResult" xml:space="preserve">
     <value>Invalid conversion result</value>
   </data>
+  <data name="ErrorAcceccingTabControl" xml:space="preserve">
+    <value>Error while acceccing tab control</value>
+  </data>
 </root>

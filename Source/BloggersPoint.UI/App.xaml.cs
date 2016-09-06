@@ -1,4 +1,4 @@
-﻿using BloggersPoint.Services;
+﻿using BloggersPoint.UI.Services;
 using System.Windows;
 using System.Windows.Threading;
 using BloggersPoint.Core.Services;

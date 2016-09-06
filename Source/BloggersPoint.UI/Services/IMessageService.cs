@@ -1,6 +1,6 @@
-﻿namespace BloggersPoint.Services
+﻿namespace BloggersPoint.UI.Services
 {
-    public interface IMesaageService
+    public interface IMessageService
     {
         void ShowInfoMessage(string text);
         void ShowWarningMessage(string text);

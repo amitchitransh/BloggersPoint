@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace BloggersPoint.Services
+namespace BloggersPoint.UI.Services
 {
-    public class MessageService: IMesaageService
+    public class MessageService: IMessageService
     {
         private const string InformationCaption = "Information";
         private const string WarningCaption = "Warning";
