@@ -21,7 +21,7 @@ namespace BloggersPoint.UI.ViewModel
         private PostCollection _postList = null;
         private readonly IBloggersPointService _bloggersPointService = new BloggersPointService();
         private ICommand _loadedCommand;
-        private readonly IMesaageService _messageService = new MessageService();
+        private readonly IMessageService _messageService = new MessageService();
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         private const string PostDataResource = "posts";

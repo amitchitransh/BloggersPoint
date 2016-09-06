@@ -30,7 +30,7 @@ namespace BloggersPoint.UI.ViewModel
         private string _objectAsJson;
         private CommentCollection _comments;
         private readonly IBloggersPointService _bloggersPointService = new BloggersPointService();
-        private readonly IMesaageService _messageService = new MessageService();
+        private readonly IMessageService _messageService = new MessageService();
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         private const string AuthorDataResource = "users";

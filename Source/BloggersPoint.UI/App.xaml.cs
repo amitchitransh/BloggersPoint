@@ -12,7 +12,7 @@ namespace BloggersPoint.UI
     {
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            IMesaageService messageBoxService = new MessageService();
+            IMessageService messageBoxService = new MessageService();
             messageBoxService.ShowErrorMessage("An unhandled exception occurred: " + e.Exception.Message);
             Current.Shutdown();
         }
