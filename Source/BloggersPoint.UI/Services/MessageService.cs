@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace BloggersPoint.UI.Services
 {
@@ -20,6 +21,7 @@ namespace BloggersPoint.UI.Services
         public void ShowErrorMessage(string text)
         {
             MessageBox.Show(text, ErrorCaption, MessageBoxButton.OK, MessageBoxImage.Error);
+            Application.Current.Shutdown();
         }
     }
 }

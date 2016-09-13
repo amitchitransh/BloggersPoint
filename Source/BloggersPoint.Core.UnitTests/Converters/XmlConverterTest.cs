@@ -61,5 +61,13 @@ namespace BloggersPoint.Core.UnitTests.Converters
             Assert.AreEqual(conversionResult.ConversionResultStatus, ConversionResultStatus.Ok);
             Assert.AreEqual(Regex.Replace(Regex.Replace(Regex.Replace(conversionResult.ResultString, @"\r\n?|\n", ""), @"\s+", ""), @"\""", ""), _objectAsXmlString);
         }
+
+        [TestCase]
+        public void StringWriterUtf8EncodingTest()
+        {
+            var conversionResult = _objectConverter.Convert(_post);
+            Assert.AreEqual(conversionResult.ConversionResultStatus, ConversionResultStatus.Ok);
+            StringAssert.Contains("encoding=\"utf-8\"", conversionResult.ResultString);
+        }
     }
 }

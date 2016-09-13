@@ -30,29 +30,18 @@ namespace BloggersPoint.Core.Models
         {
             var postString = string.Empty;
 
-            //try
-            //{
                 if (Author != null)
                     postString =
-                        $"Author{Environment.NewLine}UserName:{Author.UserName}{Environment.NewLine}E-Mail{Author.EMail}{Environment.NewLine}{Author.Phone}{Environment.NewLine}{Author.Website}{Environment.NewLine}{Environment.NewLine}";
+                        $"Author{Environment.NewLine}UserName: {Author.UserName}{Environment.NewLine}E-Mail: {Author.EMail}{Environment.NewLine}Phone: {Author.Phone}{Environment.NewLine}Web Site: {Author.Website}{Environment.NewLine}{Environment.NewLine}";
 
                 postString = postString +
-                             $"Post{Environment.NewLine}Title:{Title}{Environment.NewLine}Body:{Body}{Environment.NewLine}{Environment.NewLine}";
+                             $"Post{Environment.NewLine}Title: {Title}{Environment.NewLine}Body: {Body}{Environment.NewLine}{Environment.NewLine}";
 
                 if (Comments != null)
                     postString = postString + Comments;
 
-            //    throw new ArgumentNullException();
-            //}
-            //catch (Exception exception)
-            //{
-
-            //    System.IO.File.WriteAllText(@"C:\users\public\error.txt", exception.InnerException.ToString()); 
-            //}
-
             return postString;
         }
-
     }
 
 

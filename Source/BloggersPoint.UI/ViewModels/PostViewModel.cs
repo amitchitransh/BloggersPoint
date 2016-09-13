@@ -29,7 +29,7 @@ namespace BloggersPoint.UI.ViewModel
         private string _objectAsHtml;
         private string _objectAsJson;
         private CommentCollection _comments;
-        private readonly IBloggersPointService _bloggersPointService = new BloggersPointService();
+        private readonly IBloggersPointService _bloggersPointService;
         private readonly IMessageService _messageService = new MessageService();
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -243,13 +243,13 @@ namespace BloggersPoint.UI.ViewModel
             CopyResultMessage = JsonCopiedSuccessfullyMessage;
         }
 
-        private IObjectConverter ConvertObject(ConversionOption conversionOption)
+        private ConversionResult ConvertObject(ConversionOption conversionOption)
         {
             CopyResultMessage = string.Empty;
 
             PrepareAdditionalObjects();
 
-            IObjectConverter objectConverter = null;
+            IObjectConverter objectConverter;
 
             switch (conversionOption)
             {
@@ -266,7 +266,8 @@ namespace BloggersPoint.UI.ViewModel
                     objectConverter = new PlainTextConverter();
                     break;
             }
-            return objectConverter;
+
+            return objectConverter.Convert(Post);
         }
 
         private void PrepareAdditionalObjects()
@@ -277,11 +278,11 @@ namespace BloggersPoint.UI.ViewModel
                 Post.Comments = Comments;
         }
 
-        public PostViewModel(Post post)
+        public PostViewModel(Post post, IBloggersPointService bloggersPointService)
         {
             PropertyChanged -= OnPropertyChanged;
             PropertyChanged += OnPropertyChanged;
-
+            _bloggersPointService = bloggersPointService;
             Post = post;
             CopyResultMessage = string.Empty;
         }
@@ -306,8 +307,7 @@ namespace BloggersPoint.UI.ViewModel
 
         private void PopulateHtmlTab()
         {
-            var objectConverter = ConvertObject(ConversionOption.Html);
-            var conversionResult = objectConverter.Convert(Post);
+            var conversionResult = ConvertObject(ConversionOption.Html); 
 
             if (conversionResult.ConversionResultStatus == ConversionResultStatus.Failed)
                 return;
@@ -324,8 +324,7 @@ namespace BloggersPoint.UI.ViewModel
 
         private void PopulateJsonTab()
         {
-            var objectConverter = ConvertObject(ConversionOption.Json);
-            var conversionResult = objectConverter.Convert(Post);
+            var conversionResult = ConvertObject(ConversionOption.Json);
 
             if (conversionResult.ConversionResultStatus == ConversionResultStatus.Failed)
                 return;
@@ -335,8 +334,7 @@ namespace BloggersPoint.UI.ViewModel
 
         private void PopulatePlainTextTab()
         {
-            var objectConverter = ConvertObject(ConversionOption.PlainText);
-            var conversionResult = objectConverter.Convert(Post);
+            var conversionResult = ConvertObject(ConversionOption.PlainText);
 
             if (conversionResult.ConversionResultStatus == ConversionResultStatus.Failed)
                 return;

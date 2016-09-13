@@ -19,8 +19,8 @@ namespace BloggersPoint.UI.ViewModel
         private bool _isBusy;
         private bool _isPostDetailVisible;
         private PostCollection _postList = null;
-        private readonly IBloggersPointService _bloggersPointService = new BloggersPointService();
         private ICommand _loadedCommand;
+        private readonly IBloggersPointService _bloggersPointService;
         private readonly IMessageService _messageService = new MessageService();
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
 
@@ -99,8 +99,9 @@ namespace BloggersPoint.UI.ViewModel
 
         }
 
-        public PostListViewModel()
+        public PostListViewModel(IBloggersPointService bloggersPointService)
         {
+            _bloggersPointService = bloggersPointService;
             PropertyChanged += OnPropertyChanged;
         }
 
@@ -112,18 +113,18 @@ namespace BloggersPoint.UI.ViewModel
             if (SelectedPost != null)
             {
                 IsPostDetailVisible = true;
-                SelectedPostViewModel = new PostViewModel(SelectedPost);
+                SelectedPostViewModel = new PostViewModel(SelectedPost, _bloggersPointService);
             }
             else
                 IsPostDetailVisible = false;
         }
 
-        public static PostListViewModel Instance()
+        public static PostListViewModel Instance(IBloggersPointService bloggersPointService)
         {
             if (_instance != null)
                 return _instance;
 
-            _instance = new PostListViewModel();
+            _instance = new PostListViewModel(bloggersPointService);
             return _instance;
         }
 
@@ -153,6 +154,9 @@ namespace BloggersPoint.UI.ViewModel
             try
             {
                 postData = await _bloggersPointService.RunGetJsonDataTask<PostCollection>(PostDataResource);
+
+                if (postData == null)
+                    throw new NullReferenceException(nameof(postData));
             }
             catch (Exception exception)
             {

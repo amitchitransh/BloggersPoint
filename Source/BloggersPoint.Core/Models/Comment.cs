@@ -29,7 +29,7 @@ namespace BloggersPoint.Core.Models
         {
             var comments = $"Comments{Environment.NewLine}";
 
-            return this.Aggregate(comments, (current, comment) => current + $"Name:{comment.Name}{Environment.NewLine}E-Mail:{comment.EMail}{Environment.NewLine}Body:{comment.Body}{Environment.NewLine}{Environment.NewLine}");
+            return this.Aggregate(comments, (current, comment) => current + $"Name: {comment.Name}{Environment.NewLine}E-Mail: {comment.EMail}{Environment.NewLine}Body: {comment.Body}{Environment.NewLine}{Environment.NewLine}");
         }
     }
 }

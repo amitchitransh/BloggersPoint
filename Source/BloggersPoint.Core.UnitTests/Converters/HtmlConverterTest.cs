@@ -14,7 +14,7 @@ namespace BloggersPoint.Core.UnitTests.Converters
         private IObjectConverter _objectConverter = null;
         private string _objectAsHtmlString = string.Empty;
 
-         [SetUp]
+        [SetUp]
         public void Setup()
         {
             _post = new Post
