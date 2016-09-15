@@ -61,5 +61,11 @@ namespace BloggersPoint.UI.Tests.ViewModels
             messageService.Verify(v => v.ShowErrorMessage(It.IsAny<string>()));
             Assert.IsFalse(_postViewModel.IsBusy);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _postViewModel = null;
+        }
     }
 }

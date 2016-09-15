@@ -5,16 +5,9 @@ using BloggersPoint.Core.Services;
 
 namespace BloggersPoint.UI.Tests.Mock
 {
-    //public enum NetworkStatus
-    //{
-    //    Connected,
-    //    Disconnected
-    //}
 
     public class FakeBloggersPointService: IBloggersPointService
     {
-
-       // public NetworkStatus NetworkStatus { get; set; }
         
         private readonly Post _post = new Post
         {
@@ -52,7 +45,6 @@ namespace BloggersPoint.UI.Tests.Mock
             _posts.Add(_post);
             _comments.Add(_comment);
             _authors.Add(_author);
-          //  NetworkStatus = NetworkStatus.Connected;
         }
 
         public async Task<T> RunGetJsonDataTask<T>(string jsonResource)
@@ -67,17 +59,11 @@ namespace BloggersPoint.UI.Tests.Mock
 
         public T RequestDataFromServer<T>(string resourceName)
         {   
-           // if (NetworkStatus == NetworkStatus.Disconnected)
-            //    return default(T);
-
             return (T)Convert.ChangeType(_posts, typeof(T));
         }
 
         public T RequestDataFromServer<T>(string resourceName, string idField, string id)
         {
-           // if (NetworkStatus == NetworkStatus.Disconnected)
-           //     return default(T);
-
             object dataObject = null;
 
             switch (typeof(T).Name)
