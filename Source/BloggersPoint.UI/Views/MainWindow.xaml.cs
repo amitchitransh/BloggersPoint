@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using BloggersPoint.UI.ViewModel;
 using BloggersPoint.Core.Services;
+using BloggersPoint.UI.Services;
 
 namespace BloggersPoint.UI.Views
 {
@@ -13,7 +14,8 @@ namespace BloggersPoint.UI.Views
         {
             InitializeComponent();
             IBloggersPointService bloggersPointService = new BloggersPointService();
-            DataContext = PostListViewModel.Instance(bloggersPointService);
+            IMessageService messageService = new MessageService();
+            DataContext = PostListViewModel.Instance(bloggersPointService, messageService);
         }
     }
 }

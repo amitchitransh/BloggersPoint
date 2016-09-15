@@ -30,7 +30,7 @@ namespace BloggersPoint.UI.ViewModel
         private string _objectAsJson;
         private CommentCollection _comments;
         private readonly IBloggersPointService _bloggersPointService;
-        private readonly IMessageService _messageService = new MessageService();
+        public readonly IMessageService MessageService;
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         private const string AuthorDataResource = "users";
@@ -278,11 +278,13 @@ namespace BloggersPoint.UI.ViewModel
                 Post.Comments = Comments;
         }
 
-        public PostViewModel(Post post, IBloggersPointService bloggersPointService)
+        public PostViewModel(Post post, IBloggersPointService bloggersPointService, IMessageService messageService)
         {
             PropertyChanged -= OnPropertyChanged;
             PropertyChanged += OnPropertyChanged;
             _bloggersPointService = bloggersPointService;
+            MessageService = messageService;
+
             Post = post;
             CopyResultMessage = string.Empty;
         }
@@ -375,7 +377,7 @@ namespace BloggersPoint.UI.ViewModel
             }
             catch (Exception exception)
             {
-                _messageService.ShowErrorMessage(Resources.ConnectivityErrorMessage);
+                MessageService.ShowErrorMessage(Resources.ConnectivityErrorMessage);
                 Log.Error(exception);
             }
 
@@ -390,7 +392,7 @@ namespace BloggersPoint.UI.ViewModel
             }
             catch (Exception exception)
             {
-                _messageService.ShowErrorMessage(Resources.ConnectivityErrorMessage);
+                MessageService.ShowErrorMessage(Resources.ConnectivityErrorMessage);
                 Log.Error(exception);
             }
             return _comments;

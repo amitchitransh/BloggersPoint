@@ -21,7 +21,7 @@ namespace BloggersPoint.UI.ViewModel
         private PostCollection _postList = null;
         private ICommand _loadedCommand;
         private readonly IBloggersPointService _bloggersPointService;
-        private readonly IMessageService _messageService = new MessageService();
+        private readonly IMessageService _messageService;
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         private const string PostDataResource = "posts";
@@ -99,9 +99,12 @@ namespace BloggersPoint.UI.ViewModel
 
         }
 
-        public PostListViewModel(IBloggersPointService bloggersPointService)
+        public PostListViewModel(IBloggersPointService bloggersPointService, IMessageService messageService)
         {
             _bloggersPointService = bloggersPointService;
+            _messageService = messageService;
+
+            PropertyChanged -= OnPropertyChanged;
             PropertyChanged += OnPropertyChanged;
         }
 
@@ -113,18 +116,18 @@ namespace BloggersPoint.UI.ViewModel
             if (SelectedPost != null)
             {
                 IsPostDetailVisible = true;
-                SelectedPostViewModel = new PostViewModel(SelectedPost, _bloggersPointService);
+                SelectedPostViewModel = new PostViewModel(SelectedPost, _bloggersPointService, _messageService);
             }
             else
                 IsPostDetailVisible = false;
         }
 
-        public static PostListViewModel Instance(IBloggersPointService bloggersPointService)
+        public static PostListViewModel Instance(IBloggersPointService bloggersPointService, IMessageService messageService)
         {
             if (_instance != null)
                 return _instance;
 
-            _instance = new PostListViewModel(bloggersPointService);
+            _instance = new PostListViewModel(bloggersPointService, messageService);
             return _instance;
         }
 
@@ -142,13 +145,12 @@ namespace BloggersPoint.UI.ViewModel
 
         private async void ShowPosts()
         {
-            IsBusy = true;
             PostList = await GetAllPosts();
-            IsBusy = false;
         }
 
-        private async Task<PostCollection> GetAllPosts()
+        public async Task<PostCollection> GetAllPosts()
         {
+            IsBusy = true;
             PostCollection postData = null;
 
             try
@@ -163,6 +165,7 @@ namespace BloggersPoint.UI.ViewModel
                 _messageService.ShowErrorMessage(Resources.ConnectivityErrorMessage);
                 _log.Error(exception);
             }
+            IsBusy = false;
             return postData;
         }
     }
